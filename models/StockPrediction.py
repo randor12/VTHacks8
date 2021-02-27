@@ -7,7 +7,7 @@ from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from yahoo_fin import stock_info as si
 from collections import deque
-from GetTime import get_diff
+from .GetTime import get_diff
 
 
 import os

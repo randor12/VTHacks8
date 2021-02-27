@@ -23,6 +23,8 @@ def index():
                 expected_price = predict_price(company)
             except Exception:
                 print('Could not predict price')
+                
+            print('Predicted Price:', expected_price)
                  
         else:
             print("Could not find that company")
