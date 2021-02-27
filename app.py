@@ -30,6 +30,7 @@ def display():
         return render_template('results.html')
     else:
         company = request.form['company']
+        print(company)
         links = scraper(company, 10)
         # perform action with the new company 
         
