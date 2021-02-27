@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from webscrapper import scraper
 from models.StockPrediction import predict_price
 import numpy as np
+import json
 
 app = Flask(__name__)
 app.secret_key = 'S3CR3TK3Y'
@@ -11,18 +12,42 @@ def index():
     """
     Get the index page 
     """
+    err = None
+    if 'error' in session.keys():
+        err = session['error']
+        session.pop('error')
     if request.method == 'GET':
-        # get request for the index page 
-        return render_template('index.html')
+        # get request for the index page
+        if err is None: 
+            return render_template('index.html')
+        else:
+            return render_template('index.html', error=err)
     else:
         # post request for the index page 
         company = request.form.get('company')
+        
+        if len(company) < 1:
+            # if the submit contained no information 
+            return render_template('index.html')
+        company = company.upper()
+        session['company_name'] = company
+        return redirect(url_for('load'))
 
+@app.route('/load', methods=['GET', 'POST'])
+def load():
+    company = ''
+    
+    if 'company_name' in session.keys():
+        # get the company to check for 
+        company = session['company_name']
+    
+    if request.method == 'GET':
+        return render_template('load_page.html', company=company)
+    else:
         if company is not None:
             
             # ensure the company is exists 
             
-            company = company.upper()
             titles = scraper(company, 10)
             titles = np.array(list(titles))
             print('Searching for company: %s' % company)
@@ -41,13 +66,15 @@ def index():
                 
                 
                 msgs = 'Could not predict price - stock could not be found'
-                
-                return render_template('index.html', error=msgs)   
+                session['error'] = msgs
+                return url_for('index')   
         else:
             print("Could not find that company")
+        
+        print('redirect to display')
         # show the results page 
-        return redirect(url_for('display'))
-
+        return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+        
 @app.route('/display', methods=['POST', 'GET'])
 def display():
     """

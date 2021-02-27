@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Loading Screen{% endblock %}
+
+{% block content %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{{ url_for('static', filename='js/load.js') }}?v=5">
+</script>
+
+{% if company is defined %}
+
+    <script>
+        load_data('{{company}}')
+    </script>
+{% endif %}
+
+<!--Make code for the video game here-->
+
+<h3>While we are loading data for your stock, we let you play this game. </h3>
+<h3>StockOverflow Analyzes a ton of data, from news articles, to stock prices, to bring you the most up to date information </h3>
+
+<div class="video-game">
+    <!--Nicole: Program Game In Here, Most Likely with JavaScript -->
+</div>
+
+{% endblock %}
