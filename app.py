@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, get_flashed_messages
 from webscrapper import scraper
 from models.StockPrediction import predict_price
+import numpy as np
 
 app = Flask(__name__)
 app.secret_key = 'S3CR3TK3Y'
@@ -23,6 +24,7 @@ def index():
             
             company = company.upper()
             titles = scraper(company, 10)
+            titles = np.array(list(titles))
             print('Searching for company: %s' % company)
             # Gather information on the stock for this company here
             expected_price = -1
