@@ -11,7 +11,7 @@ def index():
         return render_template('index.html')
     else:
         company = request.form.get('company')
-        titles = scraper(company)
+        titles = scraper(company, 10)
 
         if company is not None:
             print('Searching for company: %s' % company)

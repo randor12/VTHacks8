@@ -33,7 +33,8 @@ def scraper(topic, num_pages):
             if 'url?q=' in link:
                 # article title
                 text = str(content.text)
-                if text.lower() is not 'learn more' or text.lower() is not 'sign in':
-                    # adds article title to set
-                    links.add(text)
+                # adds article title to set
+                links.add(text)
+    links.remove('Learn more')
+    links.remove('Sign in')
     return links
