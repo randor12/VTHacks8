@@ -34,3 +34,6 @@ def display():
         # perform action with the new company 
         
         return render_template('results.html')
+
+
+app.run()
