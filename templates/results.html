@@ -1,9 +1,19 @@
 {% extends 'base.html' %}
 
-{% block title %}Results Page {% endblock %}
+{% block title %}Results Page{% endblock %}
 
 {% block content %}
 
 <!--Put HTML for Results  Page Here -->
+
+{% if company is defined %}
+    <h1>Company: {{ company }}</h1>
+{% endif %}
+
+{% if expected_price is defined %}
+    <h2>Predicted Stock Price in 15 Days: {{ expected_price }}</h2>
+{% endif %}
+
+<a href='/'>Home</a>
 
 {% endblock %}
