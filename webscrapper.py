@@ -21,8 +21,7 @@ def scraper(topic, num_pages):
         # calculates page number as stub is based upon 10 results a page
         current_page = page_stub + (str(page * 10))
         # the full url
-        full_url = 'https://www.google.com/search?q=' + topic + '&source=lnms&tbm=nws'+current_page
-        # fullUrl = 'https://www.google.com/search?q=gme&source=lnms&tbm=nws' + currentPage
+        full_url = 'https://www.google.com/search?q=' + topic + '&source=lnms&tbm=nws' + current_page
         url = requests.get(full_url)
         soup = bs(url.content, 'html.parser')
         # a tags that hold the href link
@@ -35,10 +34,6 @@ def scraper(topic, num_pages):
                 # article title
                 text = str(content.text)
                 if text.lower() is not 'learn more' or text.lower() is not 'sign in':
-                    # gets article link, removing the google redirect
-                    # link = str(link).split('url?q=')[1]
-                    # links.add(link)
-                    # adds article link with the title
-                    # links[text] = link
+                    # adds article title to set
                     links.add(text)
     return links
