@@ -69,14 +69,15 @@
 
 <main>
 
+<form action="{{ url_for("index")}}" method="post">
   <section class="py-5 text-center container">
     <div class="row py-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
         <h1 class="fw-light">Stock Predictor</h1>
         <p class="lead text-muted">Enter a company name to have its stock trend predicted.</p>
         <p>
-          <input type="text" id="company" name="companyName" placeholder="Stock Symbol">
-          <a href="#" class="btn btn-secondary my-2">Submit</a>
+          <input type="text" id="company" name="company" placeholder="Stock Symbol">
+          <button type="submit" >Submit</button>
         </p>
       </div>
     </div>

@@ -10,8 +10,9 @@ def index():
     if request.method == 'GET':
         return render_template('index.html')
     else:
-        company = request.form['company']
-        
+        company = request.form.get('company')
+        titles = scraper(company)
+
         if company is not None:
             print('Searching for company: %s' % company)
             # Gather information on the stock for this company here 
