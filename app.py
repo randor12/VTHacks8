@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from webscrapper import scraper
+from models.StockPrediction import predict_price
+
 app = Flask(__name__)
 
 @app.route('/', methods=['POST', 'GET'])
@@ -15,7 +17,13 @@ def index():
 
         if company is not None:
             print('Searching for company: %s' % company)
-            # Gather information on the stock for this company here 
+            # Gather information on the stock for this company here
+            expected_price = -1
+            try:
+                expected_price = predict_price(company)
+            except Exception:
+                print('Could not predict price')
+                 
         else:
             print("Could not find that company")
         

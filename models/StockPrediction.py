@@ -7,6 +7,8 @@ from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from yahoo_fin import stock_info as si
 from collections import deque
+from GetTime import get_diff
+
 
 import os
 import numpy as np
@@ -156,7 +158,7 @@ from tensorflow.keras.layers import LSTM
 # Window size or the sequence length
 N_STEPS = 50
 # Lookup step, 1 is the next day
-LOOKUP_STEP = 15
+LOOKUP_STEP = get_diff() + 15
 # whether to scale feature columns & output price as well
 SCALE = True
 scale_str = f"sc-{int(SCALE)}"
@@ -199,8 +201,8 @@ class StockInfo():
     
     def set_ticker(self, t):
         self.ticker = t
-        self.ticker_data_filename = os.path.join("data", f"{self.ticker}_{date_now}.csv")
-        self.model_name = f"{date_now}_{self.ticker}"
+        self.ticker_data_filename = os.path.join("data", f"{self.ticker}.csv")
+        self.model_name = f"{self.ticker}"
     def get_ticker(self):
         return self.ticker
     def get_ticker_data_filename(self):
