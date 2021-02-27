@@ -20,7 +20,7 @@ def index():
         
         return redirect(url_for('display'))
 
-@app.rout('/display', methods=['POST', 'GET'])
+@app.route('/display', methods=['POST', 'GET'])
 def display():
     """
     Display findings on the stock on this page 
