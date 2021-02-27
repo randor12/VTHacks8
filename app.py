@@ -75,4 +75,5 @@ def display():
         return render_template('results.html', expected_price=expected_price, company=search_company)
 
 
-app.run()
+if __name__ == '__main__':
+    app.run()
