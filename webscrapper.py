@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup as bs
+import re
 
 
 def scraper(topic, num_pages):
@@ -32,7 +33,8 @@ def scraper(topic, num_pages):
             # filters out the non articles
             if 'url?q=' in link:
                 # article title
-                text = str(content.text)
+                # filter out special characters
+                text = re.sub("[-.,!_?]", " ", str(content.text))
                 # adds article title to set
                 links.add(text)
     links.remove('Learn more')
