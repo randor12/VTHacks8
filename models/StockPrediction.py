@@ -189,28 +189,37 @@ BIDIRECTIONAL = False
 LOSS = "huber_loss"
 OPTIMIZER = "adam"
 BATCH_SIZE = 64
-EPOCHS = 25
+EPOCHS = 7
+
+class StockInfo():
+    def __init__(self):
+        self.ticker = ''
+        self.ticker_data_filename = ''
+        self.model_name = ''
+    
+    def set_ticker(self, t):
+        self.ticker = t
+        self.ticker_data_filename = os.path.join("data", f"{self.ticker}_{date_now}.csv")
+        self.model_name = f"{date_now}_{self.ticker}"
+    def get_ticker(self):
+        return self.ticker
+    def get_ticker_data_filename(self):
+        return self.ticker_data_filename
+    def get_model_name(self):
+        return self.model_name
 # Amazon stock market
-ticker = "AMZN"
-ticker_data_filename = os.path.join("data", f"{ticker}_{date_now}.csv")
-# model name to save, making it as unique as possible based on parameters
-model_name = f"{date_now}_{ticker}-{shuffle_str}-{scale_str}-{split_by_date_str}-\
-{LOSS}-{OPTIMIZER}-{CELL.__name__}-seq-{N_STEPS}-step-{LOOKUP_STEP}-layers-{N_LAYERS}-units-{UNITS}"
-if BIDIRECTIONAL:
-    model_name += "-b"
 
 model = create_model(N_STEPS, len(FEATURE_COLUMNS), loss=LOSS, units=UNITS, cell=CELL, n_layers=N_LAYERS,
                         dropout=DROPOUT, optimizer=OPTIMIZER, bidirectional=BIDIRECTIONAL)
 
 def set_ticker(t):
     ticker = t
-    ticker_data_filename = os.path.join("data", f"{ticker}_{date_now}.csv")
+    vals = StockInfo()
+    vals.set_ticker(t)
+    ticker_data_filename = vals.get_ticker_data_filename()
     # model name to save, making it as unique as possible based on parameters
-    model_name = f"{date_now}_{ticker}-{shuffle_str}-{scale_str}-{split_by_date_str}-\
-    {LOSS}-{OPTIMIZER}-{CELL.__name__}-seq-{N_STEPS}-step-{LOOKUP_STEP}-layers-{N_LAYERS}-units-{UNITS}"
-    if BIDIRECTIONAL:
-        model_name += "-b"
-        
+    model_name = vals.get_model_name()
+
     # load optimal model weights from results folder
     model_path = os.path.join("results", model_name) + ".h5"
     data = load_data(ticker, N_STEPS, scale=SCALE, split_by_date=SPLIT_BY_DATE, 
@@ -308,7 +317,10 @@ def predict(model, data):
 
 
 def train(ticker):
-    
+    vals = StockInfo()
+    vals.set_ticker(ticker)
+    model_name = vals.get_model_name()
+    ticker_data_filename = vals.get_ticker_data_filename()
     # load the data
     data = load_data(ticker, N_STEPS, scale=SCALE, split_by_date=SPLIT_BY_DATE, 
                     shuffle=SHUFFLE, lookup_step=LOOKUP_STEP, test_size=TEST_SIZE, 
