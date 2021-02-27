@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-
+from webscrapper import scraper
 app = Flask(__name__)
 
 @app.route('/', methods=['POST', 'GET'])
@@ -30,7 +30,7 @@ def display():
         return render_template('results.html')
     else:
         company = request.form['company']
-        
+        links = scraper(company, 10)
         # perform action with the new company 
         
         return render_template('results.html')
