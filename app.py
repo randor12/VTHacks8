@@ -151,7 +151,7 @@ def load():
             except Exception as e:
                 # if the company could not be found 
                 print('Exception: ', str(e))
-                print('Traceback: ', str(e.with_traceback()))
+                # print('Traceback: ', str(e.with_traceback()))
                 print('Could not predict price')
                 
                 
