@@ -91,14 +91,16 @@ from random import randint
 @app.route('/load', methods=['GET', 'POST'])
 def load():
     company = ''
-    ran = randint(5, 10)
-    time.sleep(ran)
+    
     if 'search_name' in session.keys():
         # get the company to check for 
         company = session['search_name']
     if request.method == 'GET':
         return render_template('load_page.html', company=company)
     else:
+
+        ran = randint(5, 10)
+        time.sleep(ran)
 
         if company != '':
             session.pop('search_name', None)
