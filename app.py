@@ -3,6 +3,8 @@ from webscrapper import scraper
 from models.StockPrediction import predict_price
 import numpy as np
 import json
+from preprocesser import process
+from models.newspaper_review import analyze
 
 app = Flask(__name__)
 app.secret_key = 'S3CR3TK3Y'
@@ -50,14 +52,18 @@ def load():
             
             titles = scraper(company, 10)
             titles = np.array(list(titles))
-            print('Searching for company: %s' % company)
+            process(titles)
+            score = analyze("models/testfile.txt")
+            print('score: ', score)
             # Gather information on the stock for this company here
             expected_price = -1
             try:
                 # get the predicted price 
+                print('Searching for company: %s' % company)
                 expected_price = predict_price(company)
                 session['search_company'] = company
                 session['expected_price'] = str(expected_price)
+                session['newspaper_review'] = score
                 print('Predicted Price:', expected_price)
                     
             except Exception:
@@ -89,11 +95,15 @@ def display():
     if 'search_company' in session.keys():
         # get the company being searched 
         search_company = session['search_company']
+
+    if 'newspaper_review' in session.keys():
+        # get the company being searched 
+        newspaper_review = session['newspaper_review']
     
     
     if request.method == 'GET':
         # get request for the results page 
-        return render_template('results.html', expected_price=expected_price, company=search_company)
+        return render_template('results.html', expected_price=expected_price, company=search_company, newspaper_review=newspaper_review)
     else:
         # post request for the results page 
         company = request.form['company']
@@ -101,7 +111,8 @@ def display():
         links = scraper(company, 10)
         # perform action with the new company 
         
-        return render_template('results.html', expected_price=expected_price, company=search_company)
+        return render_template('results.html', expected_price=expected_price, company=search_company, newspaper_review=newspaper_review)
+
 
 
 if __name__ == '__main__':

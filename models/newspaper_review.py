@@ -37,17 +37,15 @@ def print_result(annotations):
         "Overall Sentiment: score of {} with magnitude of {}".format(score, magnitude)
     )
     return 0
-
-
 # [END language_sentiment_tutorial_print_result]
 
 
 # [START language_sentiment_tutorial_analyze_sentiment]
-def analyze(movie_review_filename):
+def analyze(newspaper_review_filename):
     """Run a sentiment analysis request on text within a passed filename."""
     client = language_v1.LanguageServiceClient()
 
-    with open(movie_review_filename, "r") as review_file:
+    with open(newspaper_review_filename, "r", encoding="utf-8") as review_file:
         # Instantiates a plain text document.
         content = review_file.read()
 
@@ -57,7 +55,10 @@ def analyze(movie_review_filename):
     # Print the results
     print_result(annotations)
 
+    return annotations.document_sentiment.score
+    #magnitude = annotations.document_sentiment.magnitude
 
+   #score(annotations)
 # [END language_sentiment_tutorial_analyze_sentiment]
 
 
@@ -67,11 +68,12 @@ if __name__ == "__main__":
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument(
-        "movie_review_filename",
+        "newspaper_review_filename",
         help="The filename of the movie review you'd like to analyze.",
     )
     args = parser.parse_args()
 
-    analyze(args.movie_review_filename)
+    analyze(args.newspaper_review_filename)
 # [END language_sentiment_tutorial_run_application]
+
 # [END language_sentiment_tutorial]

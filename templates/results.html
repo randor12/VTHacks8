@@ -14,6 +14,10 @@
     <h2>Predicted Stock Price in 15 Days: {{ expected_price }}</h2>
 {% endif %}
 
+{% if newspaper_review is defined %}
+    <h2>Sentiment Analysis: {{ newspaper_review }}</h2>
+{% endif %}
+
 <a href='/'>Home</a>
 
 {% endblock %}

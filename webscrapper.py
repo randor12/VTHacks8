@@ -25,6 +25,7 @@ def scraper(topic, num_pages):
         full_url = 'https://www.google.com/search?q=' + topic + '&source=lnms&tbm=nws' + current_page
         url = requests.get(full_url)
         soup = bs(url.content, 'html.parser')
+        soup.encode("utf-8", errors='replace')
         # a tags that hold the href link
         a_tags = soup.find_all('a')
         for content in a_tags:
