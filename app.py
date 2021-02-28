@@ -18,24 +18,37 @@ def index():
     Get the index page 
     """
     err = None
+    dic = list(session.items())
+    length = int(len(dic) / 2)
+    vals = ""
+    for i in range(length):
+        if i == 3:
+            break
+        k = i * 2
+        name = str(dic[k][0])
+        price = str(dic[k+1][1])
+        print("Company name is: "+ name+", and price is: "+ price)
+        vals += name + ","
+        vals += price + ","
+    vals = vals[:-1]
     if 'error' in session.keys():
         err = session['error']
         session.pop('error')
     if request.method == 'GET':
         # get request for the index page
-        if err is None: 
-            return render_template('index.html')
+        if err is None:
+            return render_template('index.html', vals=dic)
         else:
-            return render_template('index.html', error=err)
+            return render_template('index.html', error=err, vals=dic)
     else:
-        # post request for the index page 
+        # post request for the index page
         company = request.form.get('company')
-        
+
         if len(company) < 1:
-            # if the submit contained no information 
-            return render_template('index.html')
+            # if the submit contained no information
+            return render_template('index.html', vals=vals)
         company = company.upper()
-        session['company_name'] = company
+        session[company] = company
         return redirect(url_for('load'))
 
 @app.route('/load', methods=['GET', 'POST'])
