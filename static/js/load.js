@@ -13,7 +13,7 @@ function load_data(company) {
         data: data,
         success: function() {
             console.log('Retrieved Data')
-            window.location.href = '/display';
+            window.location.href = '/';
         },
         error: function() {
             window.location.href = '/'

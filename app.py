@@ -18,28 +18,52 @@ def index():
     Get the index page 
     """
     err = None
-    dic = list(session.items())
-    length = int(len(dic) / 2)
-    vals = ""
-    for i in range(length):
-        if i == 3:
-            break
-        k = i * 2
-        name = str(dic[k][0])
-        price = str(dic[k+1][1])
-        print("Company name is: "+ name+", and price is: "+ price)
-        vals += name + ","
-        vals += price + ","
-    vals = vals[:-1]
+    
+    vals = []
+    
+
     if 'error' in session.keys():
         err = session['error']
-        session.pop('error')
+        session.pop('error', None)
+    
+    size = 0
+    if 'size' in session.keys():
+        size = session['size']
+    
+    company_names = ['val'] * size
+    price_predictions = [ 'val'] * size
+    score_predicitions = [ 'val'] * size
+    for i in session.keys():
+        if 'company' in i:
+            if '1' in i:
+                company_names[0] = session[i]
+            elif '2' in i:
+                company_names[1] = session[i]
+            else:
+                company_names[2] = session[i]
+        elif 'price' in i:
+            if '1' in i:
+                price_predictions[0] = session[i]
+            elif '2' in i:
+                price_predictions[1] = session[i]
+            else:
+                price_predictions[2] = session[i]
+        elif 'newspaper' in i:
+            if '1' in i:
+                score_predicitions[0] = session[i]
+            elif '2' in i:
+                score_predicitions[1] = session[i]
+            else:
+                score_predicitions[2] = session[i]
+    if len(company_names) > 0:
+        vals = list(zip(company_names, price_predictions, score_predicitions))
+    
     if request.method == 'GET':
         # get request for the index page
         if err is None:
-            return render_template('index.html', vals=dic)
+            return render_template('index.html', vals=vals)
         else:
-            return render_template('index.html', error=err, vals=dic)
+            return render_template('index.html', error=err, vals=vals)
     else:
         # post request for the index page
         company = request.form.get('company')
@@ -48,20 +72,29 @@ def index():
             # if the submit contained no information
             return render_template('index.html', vals=vals)
         company = company.upper()
-        session[company] = company
+        key_val = 'company'
+        count = 1
+        while (key_val + str(count) in session.keys()):
+            # track all 3 values 
+            count += 1
+            
+        session['search_name'] = company
         return redirect(url_for('load'))
 
 @app.route('/load', methods=['GET', 'POST'])
 def load():
     company = ''
     
-    if 'company_name' in session.keys():
+    if 'search_name' in session.keys():
         # get the company to check for 
-        company = session['company_name']
-    
+        company = session['search_name']
     if request.method == 'GET':
         return render_template('load_page.html', company=company)
     else:
+        
+        if company != '':
+            session.pop('search_name', None)
+        
         if company is not None:
             
             # ensure the company is exists 
@@ -76,14 +109,37 @@ def load():
             try:
                 # get the predicted price 
                 print('Searching for company: %s' % company)
+                
                 expected_price = predict_price(company)
-                session['search_company'] = company
-                session['expected_price'] = str(expected_price)
-                session['newspaper_review'] = score
+                
+                count = 1
+                key = 'expected_price'
+                
+                while key + str(count) in session:
+                    count += 1
+                
+                if count <= 3:
+                    
+                    session['search_company' + str(count)] = company
+                    session['expected_price' + str(count)] = str(expected_price)
+                    session['newspaper_review' + str(count)] = str(score)
+                    session['size'] = count
+                    
+                else:
+                    
+                    for i in range(2):
+                        session['search_company' + str(i + 1)] = session['search_company' + str(i + 2)]
+                        session['expected_price' + str(i + 1)] = session['expected_price' + str(i + 2)]
+                        session['newspaper_review' + str(i + 1)] = session['newspaper_review' + str(i + 2)]
+                        
+                    session['search_company3'] = company
+                    session['expected_price3'] = str(expected_price)
+                    session['newspaper_review3'] = str(score)
                 print('Predicted Price:', expected_price)
                     
-            except Exception:
+            except Exception as e:
                 # if the company could not be found 
+                print(str(e))
                 print('Could not predict price')
                 
                 

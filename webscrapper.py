@@ -38,6 +38,9 @@ def scraper(topic, num_pages):
                 text = re.sub("[-.,!_?]", " ", str(content.text))
                 # adds article title to set
                 links.add(text)
-    links.remove('Learn more')
-    links.remove('Sign in')
+    
+    if 'Learn more' in links:
+        links.remove('Learn more')
+    if 'Sign in' in links:
+        links.remove('Sign in')
     return links
