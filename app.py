@@ -5,6 +5,9 @@ import numpy as np
 import json
 from preprocesser import process
 from models.newspaper_review import analyze
+import os
+
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './vthacks8-b9a997455cc6.json'
 
 app = Flask(__name__)
 app.secret_key = 'S3CR3TK3Y'
