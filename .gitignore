@@ -131,6 +131,6 @@ dmypy.json
 .pyre/
 /venvc/
 
-logs/
+models/logs/
 
 testfile.txt
