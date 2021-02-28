@@ -66,7 +66,7 @@ def load():
             
             # ensure the company is exists 
             
-            titles = scraper(company, 10)
+            titles = scraper(company, 1)
             titles = np.array(list(titles))
             process(titles)
             score = analyze("models/testfile.txt")
@@ -119,15 +119,15 @@ def display():
     
     if request.method == 'GET':
         # get request for the results page 
-        return render_template('results.html', expected_price=expected_price, company=search_company, newspaper_review=newspaper_review)
+        return render_template('results.html', expected_price=expected_price, company=search_company, newspaper_review=round(newspaper_review, 1))
     else:
         # post request for the results page 
         company = request.form['company']
         print(company)
-        links = scraper(company, 10)
+        links = scraper(company, 1)
         # perform action with the new company 
         
-        return render_template('results.html', expected_price=expected_price, company=search_company, newspaper_review=newspaper_review)
+        return render_template('results.html', expected_price=expected_price, company=search_company, newspaper_review=round(newspaper_review, 1))
 
 
 

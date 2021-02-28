@@ -7,17 +7,43 @@
 <!--Put HTML for Results  Page Here -->
 
 {% if company is defined %}
-    <h1>Company: {{ company }}</h1>
+<h1>Company: {{ company }}</h1>
 {% endif %}
 
 {% if expected_price is defined %}
-    <h2>Predicted Stock Price in 15 Days: {{ expected_price }}</h2>
+<h2>Predicted Stock Price in 15 Days: {{ expected_price }}</h2>
 {% endif %}
 
 {% if newspaper_review is defined %}
-    <h2>Sentiment Analysis: {{ newspaper_review }}</h2>
+<div>
+    <h3 id = "description">Sentiment Analysis: </h3>
+    <h3 id ="sa">{{ newspaper_review }}</h3>
+</div>
 {% endif %}
+<body onload="changeColor();"></body>
 
-<a href='/'>Home</a>
+<a href='/'><button>Home</button></a>
+<script>
+    var news = '{{ newspaper_review }}'
+    function changeColor() {
+        var desc = document.getElementById('description');
+        var element = document.getElementById('sa');
+        if (news <= -0.09){
+            description = "The sentiment analysis recommends purchasing this stock, with a score of ";
+            color = "red";
+        }else if (news >= 0.09){
+            description = "The sentiment analysis recommends purchasing this stock, with a score of";
+            color = "green";
+        }else{
+            description = "The sentiment analysis on purchasing this stock is neither recommended or not recommened, with a score of ";
+            color = "yellow";
+        }
+        desc.innerHTML = description;
+        element.style.color = color;
+    }
+</script>
 
+<style>
+    h3{display: inline;}
+</style>
 {% endblock %}
