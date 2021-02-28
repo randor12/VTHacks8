@@ -7,6 +7,8 @@ from preprocesser import process
 from models.newspaper_review import analyze
 import os
 
+WHITE_LIST = ['AAPL', 'FB', 'GOOG', 'GME', 'AMZN']
+
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './vthacks8-b9a997455cc6.json'
 
 app = Flask(__name__)
@@ -94,6 +96,15 @@ def load():
         
         if company != '':
             session.pop('search_name', None)
+        
+        if company not in WHITE_LIST:
+            msg = 'Stocks must be one of the following: '
+            for i in WHITE_LIST:
+                msg = msg + i
+                if i != WHITE_LIST[-1]:
+                    msg = msg + ', '
+            session['error']  = msg
+            return url_for('index')
         
         if company is not None:
             
