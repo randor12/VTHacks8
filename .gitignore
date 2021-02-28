@@ -134,3 +134,5 @@ dmypy.json
 data/
 logs/
 results/
+
+testfile.txt
