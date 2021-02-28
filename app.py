@@ -147,10 +147,13 @@ def load():
                     session['expected_price3'] = str(expected_price)
                     session['newspaper_review3'] = str(score)
                 print('Predicted Price:', expected_price)
+                
+                raise Exception('failed')
                     
             except Exception as e:
                 # if the company could not be found 
-                print(str(e))
+                print('Exception: ', str(e))
+                print('Traceback: ', str(e.with_traceback()))
                 print('Could not predict price')
                 
                 
