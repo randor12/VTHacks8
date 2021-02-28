@@ -7,7 +7,7 @@ from preprocesser import process
 from models.newspaper_review import analyze
 import os
 
-WHITE_LIST = ['AAPL', 'FB', 'GOOG', 'GME', 'AMZN']
+WHITE_LIST = ['AAPL', 'FB', 'GOOG', 'GME', 'AMZN', 'COF']
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './vthacks8-b9a997455cc6.json'
 
